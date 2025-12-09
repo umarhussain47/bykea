@@ -1135,7 +1135,7 @@
             if (currentStep < 1) currentStep = 1;
             if (currentStep > 5) currentStep = 5;
             
-            // Update progress stepper FIRST to ensure it reflects the new step
+            // Update progress stepper FIRST to ensure it reflects the new step immediately
             updateProgressStepper();
             
             // Hide all steps
@@ -1157,10 +1157,11 @@
 
             updateTexts();
             
-            // Update progress stepper again after all updates to ensure it's correct
-            requestAnimationFrame(() => {
+            // Update progress stepper - call immediately and also after a brief delay to ensure DOM updates
+            updateProgressStepper();
+            setTimeout(() => {
                 updateProgressStepper();
-            });
+            }, 50);
         }
         
         function updateProgressStepper() {
@@ -1319,10 +1320,10 @@
             // Call switchView on load to handle initial rendering, language update, and progress stepper
             switchView();
             
-            // Force update progress stepper after DOM is fully ready
-            requestAnimationFrame(() => {
+            // Force update progress stepper after DOM is fully ready (double-check)
+            setTimeout(() => {
                 updateProgressStepper();
-            });
+            }, 100);
         });
     </script>
 </body>
