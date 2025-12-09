@@ -542,7 +542,7 @@
             </button>
             <h1 class="app-title" id="page-title">Parcel Details</h1>
             <div class="progress-stepper" id="progress-stepper" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="5" aria-label="Booking progress">
-                <div class="step-indicator active" data-step="1">
+                <div class="step-indicator" data-step="1">
                     <div class="step-circle">1</div>
                     <span class="step-label" id="step-label-1">Category</span>
                 </div>
@@ -1008,7 +1008,7 @@
                 window.location.href = target;
             } else {
                 currentStep = target;
-                switchView();
+                switchView(); // switchView already calls updateProgressStepper()
             }
         }
 
@@ -1112,7 +1112,7 @@
                     performNavigation('index.html', true);
                 } else {
                     currentStep--;
-                    switchView();
+                    switchView(); // switchView already calls updateProgressStepper()
                     // Announce new view title AFTER switch is complete
                     if (currentMode === 'accessible') {
                         const titleKey = `title${currentStep}`;
@@ -1131,6 +1131,13 @@
         }
 
         function switchView() {
+            // Ensure currentStep is valid before proceeding
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > 5) currentStep = 5;
+            
+            // Update progress stepper FIRST to ensure it reflects the new step
+            updateProgressStepper();
+            
             // Hide all steps
             for (let i = 1; i <= 5; i++) {
                 const el = document.getElementById(`step-${i}`);
@@ -1149,33 +1156,45 @@
             if (currentStep === 5) updateStep5Tracking();
 
             updateTexts();
-            updateProgressStepper();
+            
+            // Update progress stepper again after all updates to ensure it's correct
+            requestAnimationFrame(() => {
+                updateProgressStepper();
+            });
         }
         
         function updateProgressStepper() {
             const stepper = document.getElementById('progress-stepper');
             if (!stepper) return;
             
+            // Ensure currentStep is valid
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > 5) currentStep = 5;
+            
             const lang = currentLang;
             const indicators = stepper.querySelectorAll('.step-indicator');
             const totalSteps = 5;
+            
+            if (indicators.length === 0) return;
             
             // Calculate progress percentage
             const progressPercent = ((currentStep - 1) / (totalSteps - 1)) * 100;
             stepper.style.setProperty('--progress-percent', progressPercent);
             
+            // Update each indicator
             indicators.forEach((indicator, index) => {
                 const stepNum = index + 1;
                 const label = indicator.querySelector('.step-label');
                 
                 // Update label text
-                if (label) {
+                if (label && TEXTS[`stepLabel${stepNum}`]) {
                     label.textContent = TEXTS[`stepLabel${stepNum}`][lang];
                 }
                 
-                // Update visual state
+                // Remove all state classes first
                 indicator.classList.remove('active', 'completed');
                 
+                // Add appropriate state class
                 if (stepNum < currentStep) {
                     indicator.classList.add('completed');
                 } else if (stepNum === currentStep) {
@@ -1185,6 +1204,7 @@
             
             // Update ARIA attributes
             stepper.setAttribute('aria-valuenow', currentStep);
+            stepper.setAttribute('aria-valuetext', `Step ${currentStep} of ${totalSteps}`);
         }
         
         function showModal(title, message) {
@@ -1213,8 +1233,7 @@
             }
             els.pageTitle.textContent = TEXTS[titleKey][lang];
             els.pageTitleMain.textContent = `${TEXTS[titleKey][lang]} | ${TEXTS[titleKey]['en']}`;
-            // Update progress stepper
-            updateProgressStepper();
+            // Progress stepper is updated in switchView(), no need to call here
 
 
             // --- Step 1 ---
@@ -1299,6 +1318,11 @@
             
             // Call switchView on load to handle initial rendering, language update, and progress stepper
             switchView();
+            
+            // Force update progress stepper after DOM is fully ready
+            requestAnimationFrame(() => {
+                updateProgressStepper();
+            });
         });
     </script>
 </body>

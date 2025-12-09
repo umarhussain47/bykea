@@ -496,7 +496,7 @@
             </button>
             <h1 class="app-title" id="page-title">سواری بک کریں</h1>
             <div class="progress-stepper" id="progress-stepper" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="3" aria-label="Booking progress">
-                <div class="step-indicator active" data-step="1">
+                <div class="step-indicator" data-step="1">
                     <div class="step-circle">1</div>
                     <span class="step-label" id="step-label-1">Location</span>
                 </div>
@@ -690,6 +690,8 @@
                 } else {
                     // This handles the SPA step navigation (1 -> 2 -> 3)
                     currentStep = target;
+                    // Update progress stepper immediately before switchView
+                    updateProgressStepper();
                     switchView();
                 }
                 if (callback) callback();
@@ -978,6 +980,8 @@
                 const titleKey = `title${currentStep}`;
                 
                 const navigateBack = () => {
+                    // Update progress stepper immediately before switchView
+                    updateProgressStepper();
                     switchView();
                     // Announce new view title AFTER switch is complete
                     if (currentMode === 'accessible') {
@@ -1019,6 +1023,10 @@
             const stepper = document.getElementById('progress-stepper');
             if (!stepper) return;
             
+            // Ensure currentStep is valid
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > 3) currentStep = 3;
+            
             const lang = currentLang;
             const indicators = stepper.querySelectorAll('.step-indicator');
             const totalSteps = 3;
@@ -1032,11 +1040,11 @@
                 const label = indicator.querySelector('.step-label');
                 
                 // Update label text
-                if (label) {
+                if (label && TEXTS[`stepLabel${stepNum}`]) {
                     label.textContent = TEXTS[`stepLabel${stepNum}`][lang];
                 }
                 
-                // Update visual state
+                // Update visual state - remove all state classes first
                 indicator.classList.remove('active', 'completed');
                 
                 if (stepNum < currentStep) {
@@ -1048,6 +1056,7 @@
             
             // Update ARIA attributes
             stepper.setAttribute('aria-valuenow', currentStep);
+            stepper.setAttribute('aria-valuetext', `Step ${currentStep} of ${totalSteps}`);
         }
 
         /* --- UTIL: UI UPDATES --- */
