@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title-main">Parcel Details</title>
+    <title>Bykea - Parcel Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* --- Shared Variables & Global Reset --- */
         :root {
-            --color-text: #212121;
-            --color-bg: #FAFAFA;
-            --color-delivery: #00796B; /* Teal Accent (Used for Delivery) */
-            --color-success: #388E3C;
+            /* Bykea Brand Colors */
+            --color-text: #313131; /* Dark grey (Mine Shaft) */
+            --color-bg: #ffffff; /* White background */
+            --color-delivery: #02aa31; /* Bykea Green (Green Haze) */
+            --color-success: #02aa31; /* Bykea green for success states */
             --color-border: #757575;
-            --color-price: #D81B60; 
-            --color-highlight: #E0F2F1; /* Light Teal highlight */
+            --color-price: #02aa31; /* Bykea green for prices */
+            --color-highlight: #E8F5E9; /* Light green highlight */
             
             /* High Contrast Colors */
             --hc-bg: #000000;
@@ -23,22 +27,32 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: var(--color-bg);
             color: var(--color-text);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
+            border: 4px solid #000000;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .app-container {
             width: 100%;
-            max-width: 600px;
-            padding: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0;
             min-height: 100vh;
             box-sizing: border-box;
             position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Ensure all child elements respect container width */
+        .app-container * {
+            box-sizing: border-box;
         }
 
         /* RTL/LTR Handling */
@@ -57,15 +71,15 @@
         /* ========================================= */
         .mode-accessible { 
             font-size: 1.25rem; 
-            background-color: var(--hc-bg) !important;
-            color: var(--hc-text) !important;
+            background-color: #ffffff !important; /* White background */
+            color: var(--color-text) !important;
         }
         .mode-accessible body {
-            background-color: var(--hc-bg) !important;
-            color: var(--hc-text) !important;
+            background-color: #ffffff !important; /* White background */
+            color: var(--color-text) !important;
         }
         .mode-accessible h1, .mode-accessible h2, .mode-accessible h3, .mode-accessible h4 { 
-            color: var(--hc-text) !important;
+            color: var(--color-text) !important;
         }
 
         /* Scale Inputs/Labels/Paddings */
@@ -79,8 +93,8 @@
             border: 3px solid var(--hc-border);
         }
         .mode-accessible .location-details-box, .mode-accessible .review-section-box, .mode-accessible .rider-details-box, .mode-accessible .cat-card {
-            background-color: var(--hc-card-bg);
-            border: 3px solid var(--hc-border);
+            background-color: #ffffff;
+            border: 3px solid var(--color-text);
         }
         .mode-accessible .review-item-line .detail, .mode-accessible .status-detail { color: var(--hc-border); } 
         
@@ -93,33 +107,60 @@
         .mode-accessible .review-location h4 { font-size: 1.7rem; } 
         .mode-accessible .review-location p { font-size: 1.4rem; } 
         .mode-accessible .review-item-line .label { font-size: 1.4rem; } 
-        .mode-accessible .rider-row span { color: var(--hc-text); } 
+        .mode-accessible .rider-row span { color: var(--color-text); } 
 
         .mode-accessible .tracking-status {
-            background-color: #0A3330; 
+            background-color: #015a1f; /* Dark Bykea green */
             border-left: 5px solid var(--color-success);
         }
         .mode-accessible .map-placeholder {
-            background-color: #333333;
-            color: var(--hc-text);
+            background-color: #f0f0f0;
+            color: var(--color-text);
         }
         .mode-accessible .rider-action-buttons button {
-            background: var(--hc-card-bg);
-            border: 3px solid var(--hc-border);
-            color: var(--hc-text);
+            background: #ffffff;
+            border: 3px solid var(--color-text);
+            color: var(--color-text);
         }
         /* ========================================= */
 
         /* --- Header & Navigation (Consistent) --- */
         .app-header {
-            padding: 1rem 0;
+            padding: 0;
+            margin: 0;
             text-align: center;
             position: relative;
             border-bottom: 1px solid #eee;
             margin-bottom: 1rem;
         }
+        
+        /* Add spacing after logo */
+        .app-title,
+        .step-progress {
+            margin-top: 1.5rem;
+        }
+        
+        /* Add horizontal padding to content */
+        main#main-content,
+        .app-title,
+        .step-progress {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
         .mode-accessible .app-header {
             border-bottom: 3px solid var(--hc-border);
+        }
+        .app-logo {
+            width: 100%;
+            height: auto;
+            max-height: none;
+            object-fit: contain;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+        .mode-accessible .app-logo {
+            height: auto;
         }
         .app-title { font-weight: 800; margin: 0; }
         .step-progress { margin: -0.5rem 0 1rem; color: #666; font-size: 0.9rem; }
@@ -127,9 +168,7 @@
 
 
         .back-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+            position: relative;
             background: none;
             border: none;
             cursor: pointer;
@@ -137,11 +176,21 @@
             color: var(--color-delivery);
             display: flex;
             align-items: center;
-            padding: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
             z-index: 10;
         }
-        [dir='ltr'] .back-button { left: 0; flex-direction: row; }
-        [dir='rtl'] .back-button { right: 0; flex-direction: row-reverse; }
+        [dir='ltr'] .back-button { 
+            flex-direction: row; 
+            margin-left: 1rem;
+            margin-right: auto;
+        }
+        [dir='rtl'] .back-button { 
+            flex-direction: row-reverse; 
+            margin-right: 1rem;
+            margin-left: auto;
+        }
         .back-icon { font-size: 1.5rem; margin: 0 0.25rem; }
 
         /* --- Wizard Step Views --- */
@@ -372,7 +421,8 @@
     <div class="app-container" id="app-container">
 
         <header class="app-header">
-            <button class="back-button" id="global-back-btn">
+            <img src="logoUrdu.jpeg" alt="Bykea" class="app-logo" id="app-logo">
+            <button class="back-button" id="global-back-btn" onclick="handleBack(event)">
                 <span class="back-icon">←</span>
                 <span id="back-label">Back</span>
             </button>
@@ -590,7 +640,7 @@
         let currentStep = 1;
         let selectedCategory = localStorage.getItem('deliveryCat') || 'document';
         let currentLang = localStorage.getItem('appLang') || 'ur';
-        let currentMode = localStorage.getItem('appMode') || 'accessible';
+        let currentMode = localStorage.getItem('appMode') || 'standard'; // Default: Standard (white background)
         
         // Mock Data for Persistence
         let pickupInfo = {
@@ -980,6 +1030,10 @@
             els.container.className = `app-container mode-${currentMode}`;
 
             // Update Header & Progress
+            const appLogo = document.getElementById('app-logo');
+            if (appLogo) {
+                appLogo.src = lang === 'ur' ? 'logoUrdu.jpeg' : 'logo.png';
+            }
             els.pageTitle.textContent = TEXTS[titleKey][lang];
             els.pageTitleMain.textContent = `${TEXTS[titleKey][lang]} | ${TEXTS[titleKey]['en']}`;
             els.stepProgress.textContent = `Step ${currentStep} of 5`;

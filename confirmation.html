@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation | تصدیق</title>
+    <title>Bykea - Confirmation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* Shared Styles (Minimal set for consistency) */
         :root {
-            --color-text: #212121;
-            --color-bg: #FAFAFA;
-            --color-success: #388E3C; /* Green for Confirmation */
+            /* Bykea Brand Colors */
+            --color-text: #313131; /* Dark grey (Mine Shaft) */
+            --color-bg: #ffffff; /* White background */
+            --color-success: #02aa31; /* Bykea Green (Green Haze) */
             
             /* High Contrast Colors */
             --hc-bg: #000000;
@@ -19,7 +23,7 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: var(--color-bg);
             color: var(--color-text);
             margin: 0;
@@ -28,14 +32,41 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            border: 4px solid #000000;
+            box-sizing: border-box;
         }
 
         .app-container {
             width: 100%;
-            max-width: 600px;
-            padding: 2rem;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0;
             box-sizing: border-box;
             text-align: center;
+            overflow-x: hidden;
+        }
+        
+        /* Ensure all child elements respect container width */
+        .app-container * {
+            box-sizing: border-box;
+        }
+        .app-logo {
+            width: 100%;
+            height: auto;
+            max-height: none;
+            object-fit: contain;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+        .mode-accessible .app-logo {
+            height: auto;
+        }
+        
+        /* Add spacing after logo */
+        .confirmation-box {
+            margin-top: 1.5rem;
+            padding: 3rem 1rem;
         }
 
         /* RTL/LTR Handling */
@@ -53,17 +84,17 @@
         /* === ACCESSIBILITY SCALING (GLOBAL) - HIGH CONTRAST === */
         /* ========================================= */
         .mode-accessible { 
-            background-color: var(--hc-bg) !important;
-            color: var(--hc-text) !important;
+            background-color: #ffffff !important; /* White background */
+            color: var(--color-text) !important;
         }
         .mode-accessible body {
-            background-color: var(--hc-bg) !important;
-            color: var(--hc-text) !important;
+            background-color: #ffffff !important; /* White background */
+            color: var(--color-text) !important;
         }
         .mode-accessible .confirmation-box {
-            background: var(--hc-card-bg);
+            background: #ffffff;
             border: 5px solid var(--color-success);
-            box-shadow: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .mode-accessible .status-icon { 
@@ -84,7 +115,7 @@
             font-size: 1.8rem; 
             padding: 1.25rem 0; 
             font-weight: 800;
-            color: var(--hc-text) !important; 
+            color: #ffffff !important; 
         }
 
         /* Standard Mode Styles */
@@ -130,10 +161,58 @@
             background-color: var(--color-success);
         }
 
+        /* Back Button Styling */
+        .back-button {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--color-success);
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            z-index: 10;
+            font-family: 'Montserrat', sans-serif;
+        }
+        [dir='ltr'] .back-button { 
+            flex-direction: row; 
+            margin-left: 1rem;
+            margin-right: auto;
+        }
+        [dir='rtl'] .back-button { 
+            flex-direction: row-reverse; 
+            margin-right: 1rem;
+            margin-left: auto;
+        }
+        .back-icon { font-size: 1.5rem; margin: 0 0.25rem; }
+        
+        .mode-accessible .back-button {
+            font-size: 1.5rem;
+            padding: 1rem;
+            border: 3px solid var(--color-success);
+            border-radius: 8px;
+        }
+
+        .app-header {
+            position: relative;
+            padding: 0;
+            margin: 0;
+        }
+
     </style>
 </head>
 <body>
     <div class="app-container" id="app-container">
+        <header class="app-header">
+            <img src="logoUrdu.jpeg" alt="Bykea" class="app-logo" id="app-logo">
+            <button class="back-button" id="global-back-btn" onclick="handleBack(event)">
+                <span class="back-icon">←</span>
+                <span id="back-label">پیچھے جائیں</span>
+            </button>
+        </header>
         <div class="confirmation-box">
             <div class="status-icon">✅</div>
             <h2 class="status-message" id="status-message">بکنگ کی توثیق ہو گئی ہے!</h2>
@@ -149,19 +228,25 @@
             message: { ur: "بکنگ کی توثیق ہو گئی ہے!", en: "Booking Confirmed!" },
             detail: { ur: "آپ کی سواری جلد ہی آ رہی ہے۔", en: "Your ride is arriving shortly." },
             ok: { ur: "ٹھیک ہے", en: "OK" },
-            returnHome: { ur: "واپس مین مینیو پر جا رہے ہیں", en: "Returning to main menu." }
+            returnHome: { ur: "واپس مین مینیو پر جا رہے ہیں", en: "Returning to main menu." },
+            back: { ur: "پیچھے جائیں", en: "Back" },
+            voiceBack: { ur: "واپس جا رہے ہیں", en: "Going back" },
+            voiceToHome: { ur: "مین مینیو پر", en: "to main menu" }
         };
 
         const ELEMENTS = {
             appContainer: document.getElementById('app-container'),
             html: document.documentElement,
+            appLogo: document.getElementById('app-logo'),
+            backBtn: document.getElementById('global-back-btn'),
+            backLabel: document.getElementById('back-label'),
             statusMessage: document.getElementById('status-message'),
             statusDetail: document.getElementById('status-detail'),
             okButton: document.getElementById('ok-button'),
         };
 
         let currentLang = localStorage.getItem('appLang') || 'ur';
-        let currentMode = localStorage.getItem('appMode') || 'accessible';
+        let currentMode = localStorage.getItem('appMode') || 'standard'; // Default: Standard (white background)
 
         // TTS Initialization
         const synth = window.speechSynthesis;
@@ -197,10 +282,18 @@
             ELEMENTS.html.lang = lang;
             ELEMENTS.appContainer.className = `app-container mode-${mode}`;
 
-            // 2. Update Texts
-            ELEMENTS.statusMessage.textContent = TEXTS.message[lang];
-            ELEMENTS.statusDetail.textContent = TEXTS.detail[lang];
-            ELEMENTS.okButton.textContent = TEXTS.ok[lang];
+            // 2. Update Logo and Texts
+            if (ELEMENTS.appLogo) {
+                ELEMENTS.appLogo.src = lang === 'ur' ? 'logoUrdu.jpeg' : 'logo.png';
+            }
+            
+            // Update back button label
+            if (ELEMENTS.backLabel) {
+                ELEMENTS.backLabel.textContent = TEXTS.back[lang];
+            }
+            if (ELEMENTS.statusMessage) ELEMENTS.statusMessage.textContent = TEXTS.message[lang];
+            if (ELEMENTS.statusDetail) ELEMENTS.statusDetail.textContent = TEXTS.detail[lang];
+            if (ELEMENTS.okButton) ELEMENTS.okButton.textContent = TEXTS.ok[lang];
             
             // 3. Announce status on load
             if (mode === 'accessible') {
@@ -230,6 +323,23 @@
             }
         }
         
+        /**
+         * Handles the back button click, navigating back to home.
+         */
+        function handleBack(event) {
+            const navigateBack = () => {
+                window.location.href = 'index.html';
+            };
+            
+            if (currentMode === 'accessible') {
+                event.preventDefault();
+                const exitMessage = TEXTS.voiceBack[currentLang] + " " + TEXTS.voiceToHome[currentLang];
+                speakText(exitMessage, navigateBack);
+            } else {
+                navigateBack();
+            }
+        }
+
         /**
          * Handles the OK button click, speaking the confirmation and then navigating.
          */

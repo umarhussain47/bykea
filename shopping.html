@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Ordering | خریداری</title>
+    <title>Bykea - Shopping</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* --- Shared Variables & Global Reset --- */
         :root {
-            --color-text: #212121;
-            --color-bg: #FAFAFA;
-            --color-delivery: #00796B;
-            --color-ride: #D81B60;
-            --color-shopping: #FBC02D; /* Yellow Accent (Used for Shopping) */
-            --color-success: #388E3C;
+            /* Bykea Brand Colors */
+            --color-text: #313131; /* Dark grey (Mine Shaft) */
+            --color-bg: #ffffff; /* White background */
+            --color-delivery: #02aa31; /* Bykea Green (Green Haze) */
+            --color-ride: #02aa31; /* Bykea Green (Green Haze) */
+            --color-shopping: #02aa31; /* Bykea Green (Green Haze) */
+            --color-success: #02aa31; /* Bykea green for success states */
             --color-border: #757575;
-            --color-price: #D81B60; 
-            --color-highlight: #FFF8E1; 
+            --color-price: #02aa31; /* Bykea green for prices */
+            --color-highlight: #E8F5E9; /* Light green highlight */ 
 
             /* High Contrast Colors */
             --hc-bg: #000000;
@@ -25,22 +29,32 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: var(--color-bg);
             color: var(--color-text);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
+            border: 4px solid #000000;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .app-container {
             width: 100%;
-            max-width: 600px;
-            padding: 1rem; 
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0;
             min-height: 100vh;
             box-sizing: border-box;
             position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Ensure all child elements respect container width */
+        .app-container * {
+            box-sizing: border-box;
         }
 
         /* RTL/LTR Handling */
@@ -59,15 +73,15 @@
         /* ========================================= */
         .mode-accessible { 
             font-size: 1.25rem; 
-            background-color: var(--hc-bg) !important;
-            color: var(--hc-text) !important;
+            background-color: #ffffff !important; /* White background */
+            color: var(--color-text) !important;
         }
         .mode-accessible body {
-            background-color: var(--hc-bg) !important;
-            color: var(--hc-text) !important;
+            background-color: #ffffff !important; /* White background */
+            color: var(--color-text) !important;
         }
         .mode-accessible h1, .mode-accessible h2, .mode-accessible h3, .mode-accessible h4 { 
-            color: var(--hc-text) !important;
+            color: var(--color-text) !important;
         }
 
         /* Inputs/Labels (Increased all) */
@@ -85,8 +99,8 @@
         /* Items/Buttons (Increased all) */
         .mode-accessible .cat-card, .mode-accessible .store-card, .mode-accessible .item-card {
             padding: 1.75rem 1.25rem; 
-            background-color: var(--hc-card-bg);
-            border: 3px solid var(--hc-border);
+            background-color: #ffffff;
+            border: 3px solid var(--color-text);
         }
         .mode-accessible .cat-icon { font-size: 4rem; } 
         .mode-accessible .item-qty-btn { font-size: 1.8rem; width: 56px; height: 56px; } 
@@ -123,22 +137,46 @@
         /* --- Header Styling (Consistent with ride.html) --- */
         .app-header {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 1rem 0;
+            padding: 0;
+            margin: 0;
             position: relative;
             margin-bottom: 1rem;
             border-bottom: 1px solid #eee;
         }
+        
+        /* Add spacing after logo */
+        .header-title {
+            margin-top: 1.5rem;
+        }
+        
+        /* Add horizontal padding to content */
+        main#main-content,
+        .header-title {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
         .mode-accessible .app-header {
             border-bottom: 3px solid var(--hc-border);
+        }
+        .app-logo {
+            width: 100%;
+            height: auto;
+            max-height: none;
+            object-fit: contain;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+        .mode-accessible .app-logo {
+            height: auto;
         }
         .header-title { font-weight: 800; margin: 0; color: var(--color-text); }
 
         .back-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+            position: relative;
             background: none;
             border: none;
             cursor: pointer;
@@ -146,11 +184,21 @@
             color: var(--color-shopping); /* Accent Color */
             display: flex;
             align-items: center;
-            padding: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
             z-index: 10;
         }
-        [dir='ltr'] .back-button { left: 0; flex-direction: row; }
-        [dir='rtl'] .back-button { right: 0; flex-direction: row-reverse; }
+        [dir='ltr'] .back-button { 
+            flex-direction: row; 
+            margin-left: 1rem;
+            margin-right: auto;
+        }
+        [dir='rtl'] .back-button { 
+            flex-direction: row-reverse; 
+            margin-right: 1rem;
+            margin-left: auto;
+        }
         .back-icon { font-size: 1.5rem; margin: 0 0.25rem; }
         
         /* --- Wizard Step Views --- */
@@ -192,7 +240,7 @@
             height: 48px;
             font-size: 1.2rem;
         }
-        .mode-accessible .search-bar button { color: var(--hc-text); }
+        .mode-accessible .search-bar button { color: var(--color-text); }
 
 
         /* --- Step 1: Category Grid --- */
@@ -230,7 +278,7 @@
             position: fixed; bottom: 6rem; right: 1rem; 
             z-index: 10;
         }
-        .mode-accessible .help-icon { color: var(--hc-text); }
+        .mode-accessible .help-icon { color: var(--color-text); }
 
 
         /* --- Step 2: Store List --- */
@@ -265,7 +313,7 @@
             border-bottom: 1px solid #eee;
             background: white;
         }
-        .mode-accessible .item-card { background: var(--hc-bg); }
+        .mode-accessible .item-card { background: #ffffff; }
         .mode-accessible .item-card:last-child { border-bottom: none; }
         
         .item-info { display: flex; align-items: center; gap: 1rem; }
@@ -293,7 +341,7 @@
             height: 32px;
             font-size: 1rem;
         }
-        .mode-accessible .item-qty-btn { color: var(--hc-text); }
+        .mode-accessible .item-qty-btn { color: var(--color-text); }
         
         .item-qty-display { 
             width: 25px; 
@@ -314,7 +362,7 @@
             max-width: 600px;
             margin: 0 auto;
         }
-        .mode-accessible .fixed-footer { background: var(--hc-bg); box-shadow: 0 -2px 10px rgba(255,255,255,0.1); }
+        .mode-accessible .fixed-footer { background: #ffffff; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
         
         .view-cart-btn {
             width: 100%;
@@ -326,7 +374,7 @@
             font-weight: 700;
             font-size: 1.1rem;
         }
-        .mode-accessible .view-cart-btn { color: var(--hc-text); }
+        .mode-accessible .view-cart-btn { color: var(--color-text); }
 
 
         /* --- Step 4: Order Review --- */
@@ -377,8 +425,8 @@
             width: 90%; max-width: 400px; text-align: center; border: 4px solid var(--color-success);
         }
         .mode-accessible .modal-content {
-            background: var(--hc-card-bg);
-            color: var(--hc-text);
+            background: #ffffff;
+            color: var(--color-text);
             border: 4px solid var(--color-success);
         }
         .modal-content .action-button { background: var(--color-success); }
@@ -388,12 +436,13 @@
     <div class="app-container mode-accessible" id="app-container">
 
         <header class="app-header">
+            <img src="logoUrdu.jpeg" alt="Bykea" class="app-logo" id="app-logo">
             <button class="back-button" id="global-back-btn" onclick="handleBack(event)">
                 <span class="back-icon">←</span>
                 <span id="back-label">پیچھے جائیں</span>
             </button>
             <h1 class="header-title" id="page-title">دکانیں</h1>
-            <div style="width: 48px; height: 48px;"></div> </header>
+        </header>
 
         <main id="main-content">
             
@@ -560,7 +609,7 @@
         /* --- STATE --- */
         let currentStep = 1;
         let currentLang = localStorage.getItem('appLang') || 'ur';
-        let currentMode = localStorage.getItem('appMode') || 'accessible';
+        let currentMode = localStorage.getItem('appMode') || 'standard'; // Default: Standard (white background)
         let selectedStore = STORE_DATA[0]; 
         let cart = {
             1: 2, 
@@ -1027,6 +1076,10 @@
             const lang = currentLang;
 
             const titleKey = `title${currentStep}`;
+            const appLogo = document.getElementById('app-logo');
+            if (appLogo) {
+                appLogo.src = lang === 'ur' ? 'logoUrdu.jpeg' : 'logo.png';
+            }
             els.pageTitle.textContent = TEXTS[titleKey] ? TEXTS[titleKey][lang] : TEXTS.title1[lang];
             document.getElementById('back-label').textContent = TEXTS.back[lang];
             

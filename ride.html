@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Booking | بکنگ</title>
+    <title>Bykea - Ride Booking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* --- Shared Variables & Global Reset --- */
         :root {
-            --color-text: #212121;
-            --color-bg: #FAFAFA;
-            --color-ride: #D81B60; /* Pink Accent (Main accent) */
+            /* Bykea Brand Colors */
+            --color-text: #313131; /* Dark grey (Mine Shaft) */
+            --color-bg: #ffffff; /* White background */
+            --color-ride: #02aa31; /* Bykea Green (Green Haze) */
             --color-border: #757575;
-            --color-success: #388E3C;
-            --color-highlight: #FFFDE7;
+            --color-success: #02aa31; /* Bykea green for success states */
+            --color-highlight: #E8F5E9; /* Light green highlight */
             --color-card-bg: #FFFFFF;
 
             /* High Contrast Colors */
@@ -23,22 +27,32 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             background-color: var(--color-bg);
             color: var(--color-text);
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
+            border: 4px solid #000000;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
 
         .app-container {
             width: 100%;
-            max-width: 600px;
-            padding: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0;
             min-height: 100vh;
             box-sizing: border-box;
             position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Ensure all child elements respect container width */
+        .app-container * {
+            box-sizing: border-box;
         }
 
         /* RTL/LTR Handling */
@@ -57,15 +71,15 @@
         /* ========================================= */
         .mode-accessible { 
             font-size: 1.25rem; 
-            background-color: var(--hc-bg) !important;
-            color: var(--hc-text) !important;
+            background-color: #ffffff !important; /* White background */
+            color: var(--color-text) !important;
         }
         .mode-accessible body {
-            background-color: var(--hc-bg) !important;
-            color: var(--hc-text) !important;
+            background-color: #ffffff !important; /* White background */
+            color: var(--color-text) !important;
         }
         .mode-accessible h1, .mode-accessible h2, .mode-accessible h3, .mode-accessible h4 { 
-            color: var(--hc-text) !important;
+            color: var(--color-text) !important;
         }
 
         /* Scale Inputs/Labels/Paddings */
@@ -76,18 +90,18 @@
         .mode-accessible input { 
             font-size: 1.4rem; 
             padding: 1.25rem; 
-            background-color: var(--hc-card-bg); 
-            color: var(--hc-text);
-            border: 3px solid var(--hc-border);
+            background-color: #ffffff; 
+            color: var(--color-text);
+            border: 3px solid var(--color-text);
         }
 
         /* Scale Buttons/Items */
         .mode-accessible .location-item { 
             font-size: 1.4rem; 
             padding: 1.25rem 1.5rem; 
-            background-color: var(--hc-card-bg);
-            border: 3px solid var(--hc-border);
-            color: var(--hc-text);
+            background-color: #ffffff;
+            border: 3px solid var(--color-text);
+            color: var(--color-text);
         }
         .mode-accessible .recent-locations-container {
             border-top: 3px solid var(--hc-border);
@@ -95,11 +109,11 @@
         }
         .mode-accessible .cat-icon { font-size: 4rem; } 
         .mode-accessible .cat-card {
-            background-color: var(--hc-card-bg);
-            border: 3px solid var(--hc-border);
+            background-color: #ffffff;
+            border: 3px solid var(--color-text);
         }
         .mode-accessible .cat-card.selected { 
-            background-color: #3C0816; 
+            background-color: #015a1f; /* Dark Bykea green */
             border-color: var(--color-ride);
         }
         
@@ -114,18 +128,18 @@
 
         /* Summary */
         .mode-accessible .summary-box {
-            background: var(--hc-card-bg);
-            border: 3px solid var(--hc-border);
+            background: #ffffff;
+            border: 3px solid var(--color-text);
         }
         .mode-accessible .pay-option { 
             font-size: 1.8rem; 
             padding: 1.25rem; 
-            background: var(--hc-card-bg);
-            border: 3px solid var(--hc-border);
-            color: var(--hc-text);
+            background: #ffffff;
+            border: 3px solid var(--color-text);
+            color: var(--color-text);
         }
         .mode-accessible .pay-option.selected { 
-            background-color: #0A3300; 
+            background-color: #015a1f; /* Dark Bykea green */
             border-color: var(--color-success);
         }
         
@@ -140,22 +154,45 @@
 
         /* --- Header & Navigation --- */
         .app-header {
-            padding: 1rem 0;
+            padding: 0;
+            margin: 0;
             text-align: center;
             position: relative;
             border-bottom: 1px solid #eee;
             margin-bottom: 1rem;
         }
+        
+        /* Add spacing after logo */
+        .app-title {
+            margin-top: 1.5rem;
+        }
+        
+        /* Add horizontal padding to content */
+        main#main-content,
+        .app-title {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
         .mode-accessible .app-header {
             border-bottom: 3px solid var(--hc-border);
+        }
+        .app-logo {
+            width: 100%;
+            height: auto;
+            max-height: none;
+            object-fit: contain;
+            display: block;
+            margin: 0;
+            padding: 0;
+        }
+        .mode-accessible .app-logo {
+            height: auto;
         }
         .app-title { font-weight: 800; margin: 0; }
         .mode-standard .app-title { font-size: 1.5rem; }
         
         .back-button {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
+            position: relative;
             background: none;
             border: none;
             cursor: pointer;
@@ -163,11 +200,21 @@
             color: var(--color-ride);
             display: flex;
             align-items: center;
-            padding: 0.5rem;
+            padding: 0.75rem 1rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
             z-index: 10;
         }
-        [dir='ltr'] .back-button { left: 0; flex-direction: row; }
-        [dir='rtl'] .back-button { right: 0; flex-direction: row-reverse; }
+        [dir='ltr'] .back-button { 
+            flex-direction: row; 
+            margin-left: 1rem;
+            margin-right: auto;
+        }
+        [dir='rtl'] .back-button { 
+            flex-direction: row-reverse; 
+            margin-right: 1rem;
+            margin-left: auto;
+        }
         .back-icon { font-size: 1.5rem; margin: 0 0.25rem; }
 
         /* --- Wizard Step Views --- */
@@ -193,8 +240,8 @@
             font-weight: bold;
         }
         .mode-accessible .map-placeholder {
-            background-color: #333333;
-            color: var(--hc-text);
+            background-color: #f0f0f0;
+            color: var(--color-text);
         }
 
         .input-group { margin-bottom: 1rem; }
@@ -261,7 +308,7 @@
             padding: 0.75rem; border: 2px solid var(--color-border);
             border-radius: 8px; background: white; transition: 0.2s;
         }
-        .cat-card.selected { border-color: var(--color-ride); background-color: #FCE4EC; }
+        .cat-card.selected { border-color: var(--color-ride); background-color: var(--color-highlight); }
         .cat-icon { font-size: 2.5rem; margin-bottom: 0.25rem; }
 
         /* --- Step 2: Offers List Styles --- */
@@ -325,8 +372,8 @@
             width: 90%; max-width: 400px; text-align: center; border: 4px solid var(--color-success);
         }
         .mode-accessible .modal-content {
-            background: var(--hc-card-bg);
-            color: var(--hc-text);
+            background: #ffffff;
+            color: var(--color-text);
         }
         .mode-accessible .modal-content h3 { color: var(--color-success) !important; }
     </style>
@@ -335,6 +382,7 @@
     <div class="app-container" id="app-container">
 
         <header class="app-header">
+            <img src="logoUrdu.jpeg" alt="Bykea" class="app-logo" id="app-logo">
             <button class="back-button" id="global-back-btn" onclick="handleBack(event)">
                 <span class="back-icon"><</span>
                 <span id="back-label">پیچھے جائیں</span>
@@ -473,7 +521,7 @@
         let selectedOffer = null; 
         let currentLang = localStorage.getItem('appLang') || 'ur';
         // Setting default mode to 'accessible' as per the request's context suggests accessibility focus
-        let currentMode = localStorage.getItem('appMode') || 'accessible'; 
+        let currentMode = localStorage.getItem('appMode') || 'standard'; // Default: Standard (white background) 
         let currentInputFocus = 'dropoff'; 
 
         /* --- DOM ELEMENTS --- */
@@ -845,6 +893,10 @@
             const lang = currentLang;
 
             const titleKey = `title${currentStep}`;
+            const appLogo = document.getElementById('app-logo');
+            if (appLogo) {
+                appLogo.src = lang === 'ur' ? 'logoUrdu.jpeg' : 'logo.png';
+            }
             els.pageTitle.textContent = TEXTS[titleKey][lang];
             
             document.getElementById('back-label').textContent = TEXTS.back[lang];
